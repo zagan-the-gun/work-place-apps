@@ -30,7 +30,7 @@ if args["--id"]:
 elif os.environ.get('APP_ID'):
     APP_ID = os.environ.get('APP_ID')
 else:
-    print("ERROR: --id or APP_ID not found")
+    sys.stderr.write("ERROR: --id or APP_ID not found")
     sys.exit(2)
 
 if args["--secret"]:
@@ -38,7 +38,7 @@ if args["--secret"]:
 elif os.environ.get('APP_SECRET'):
     APP_SECRET = os.environ.get('APP_SECRET')
 else:
-    print("ERROR: --secret or APP_SECRET not found")
+    sys.stderr.write("ERROR: --secret or APP_SECRET not found")
     sys.exit(2)
 
 if args["--token"]:
@@ -46,7 +46,7 @@ if args["--token"]:
 elif os.environ.get('ACCESS_TOKEN'):
     ACCESS_TOKEN = os.environ.get('ACCESS_TOKEN')
 else:
-    print("ERROR: --token or ACCESS_TOKEN not found")
+    sys.stderr.write("ERROR: --token or ACCESS_TOKEN not found")
     sys.exit(2)
 
 if args["--community"]:
@@ -54,7 +54,7 @@ if args["--community"]:
 elif os.environ.get('COMMUNITY_ID'):
     COMMUNITY_ID = os.environ.get('COMMUNITY_ID')
 else:
-    print("ERROR: --community or COMMUNITY_ID not found")
+    sys.stderr.write("ERROR: --community or COMMUNITY_ID not found")
     sys.exit(2)
 
 if args["--force"]:
@@ -72,7 +72,9 @@ for group_id in args['<GROUP_IDS>']:
     #グループのメンバー取得
     graph_url = GRAPH_URL_PREFIX + group_id + "/members?limit=3000&fields=id,name,email"
     result = requests.get(graph_url, headers=headers)
-# TODO 200 OKを確認する
+    if result.status_code != requests.codes.ok:
+        sys.stderr.write("ERROR: request failed")
+        sys.exit(4)
     result_json = json.loads(result.text)
     group_members = result_json['data']
 
@@ -81,7 +83,9 @@ for group_id in args['<GROUP_IDS>']:
         for member in group_members:
             graph_url = GRAPH_URL_PREFIX + "/" + group_id + "/members/" + member['id']
             result = requests.delete(graph_url, headers=headers)
-# TODO 200 OKを確認する
+            if result.status_code != requests.codes.ok:
+                sys.stderr.write("ERROR: request failed")
+                sys.exit(4)
             result_json = json.loads(result.text)
 
     #メンバーがいない場合はダミーを追加してから削除
@@ -89,13 +93,17 @@ for group_id in args['<GROUP_IDS>']:
         #ダミーを追加
         graph_url = GRAPH_URL_PREFIX + "/" + group_id + "/members/" + DUMMY_USER_ID
         result = requests.post(graph_url, headers=headers)
-# TODO 200 OKを確認する
+        if result.status_code != requests.codes.ok:
+            sys.stderr.write("ERROR: request failed")
+            sys.exit(4)
         result_json = json.loads(result.text)
 
         #ダミーを削除
         graph_url = GRAPH_URL_PREFIX + "/" + group_id + "/members/" + DUMMY_USER_ID
         result = requests.delete(graph_url, headers=headers)
-# TODO 200 OKを確認する
+        if result.status_code != requests.codes.ok:
+            sys.stderr.write("ERROR: request failed")
+            sys.exit(4)
         result_json = json.loads(result.text)
 
 sys.exit(0)

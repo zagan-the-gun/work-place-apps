@@ -31,7 +31,7 @@ if args["--id"]:
 elif os.environ.get('APP_ID'):
     APP_ID = os.environ.get('APP_ID')
 else:
-    print("ERROR: --id or APP_ID not found")
+    sys.stderr.write("ERROR: --id or APP_ID not found")
     sys.exit(2)
 
 if args["--secret"]:
@@ -39,7 +39,7 @@ if args["--secret"]:
 elif os.environ.get('APP_SECRET'):
     APP_SECRET = os.environ.get('APP_SECRET')
 else:
-    print("ERROR: --secret or APP_SECRET not found")
+    sys.stderr.write("ERROR: --secret or APP_SECRET not found")
     sys.exit(2)
 
 if args["--token"]:
@@ -47,7 +47,7 @@ if args["--token"]:
 elif os.environ.get('ACCESS_TOKEN'):
     ACCESS_TOKEN = os.environ.get('ACCESS_TOKEN')
 else:
-    print("ERROR: --token or ACCESS_TOKEN not found")
+    sys.stderr.write("ERROR: --token or ACCESS_TOKEN not found")
     sys.exit(2)
 
 if args["--community"]:
@@ -55,7 +55,7 @@ if args["--community"]:
 elif os.environ.get('COMMUNITY_ID'):
     COMMUNITY_ID = os.environ.get('COMMUNITY_ID')
 else:
-    print("ERROR: --community or COMMUNITY_ID not found")
+    sys.stderr.write("ERROR: --community or COMMUNITY_ID not found")
     sys.exit(2)
 
 GRAPH_URL_PREFIX = "https://graph.facebook.com/"
@@ -76,6 +76,7 @@ def checkGroupNameDate(group_name):
 graph_url = GRAPH_URL_PREFIX + COMMUNITY_ID + "/groups?limit=1000&fields=name,privacy,updated_time"
 result = requests.get(graph_url, headers=headers)
 if result.status_code != requests.codes.ok:
+    sys.stderr.write("ERROR: request failed")
     sys.exit(4)
 result_json = json.loads(result.text)
 groups = result_json['data']

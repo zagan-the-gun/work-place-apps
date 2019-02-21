@@ -32,7 +32,7 @@ if args["--day"]:
 elif os.environ.get('DAY_LATER'):
     DAY_LATER = os.environ.get('DAY_LATER')
 else:
-    print("ERROR: --day or DAY_LATER not found")
+    sys.stderr.write("ERROR: --day or DAY_LATER not found")
     sys.exit(2)
 
 if args["--id"]:
@@ -40,7 +40,7 @@ if args["--id"]:
 elif os.environ.get('APP_ID'):
     APP_ID = os.environ.get('APP_ID')
 else:
-    print("ERROR: --id or APP_ID not found")
+    sys.stderr.write("ERROR: --id or APP_ID not found")
     sys.exit(2)
 
 if args["--secret"]:
@@ -48,7 +48,7 @@ if args["--secret"]:
 elif os.environ.get('APP_SECRET'):
     APP_SECRET = os.environ.get('APP_SECRET')
 else:
-    print("ERROR: --secret or APP_SECRET not found")
+    sys.stderr.write("ERROR: --secret or APP_SECRET not found")
     sys.exit(2)
 
 if args["--token"]:
@@ -56,7 +56,7 @@ if args["--token"]:
 elif os.environ.get('ACCESS_TOKEN'):
     ACCESS_TOKEN = os.environ.get('ACCESS_TOKEN')
 else:
-    print("ERROR: --token or ACCESS_TOKEN not found")
+    sys.stderr.write("ERROR: --token or ACCESS_TOKEN not found")
     sys.exit(2)
 
 if args["--community"]:
@@ -64,7 +64,7 @@ if args["--community"]:
 elif os.environ.get('COMMUNITY_ID'):
     COMMUNITY_ID = os.environ.get('COMMUNITY_ID')
 else:
-    print("ERROR: --community or COMMUNITY_ID not found")
+    sys.stderr.write("ERROR: --community or COMMUNITY_ID not found")
     sys.exit(2)
 
 GRAPH_URL_PREFIX = "https://graph.facebook.com/"
@@ -101,3 +101,4 @@ for group in groups:
             print("    group最後の行動から {} 日 ".format((now-last).days))
 
 sys.exit(0)
+

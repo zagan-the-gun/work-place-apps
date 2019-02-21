@@ -36,7 +36,7 @@ if args["--name"]:
 elif os.environ.get('NAME'):
     NAME = os.environ.get('NAME')
 else:
-    print("ERROR: --name or NAME not found")
+    sys.stderr.write("ERROR: --name or NAME not found")
     sys.exit(2)
 
 if args["--privacy"]:
@@ -44,7 +44,7 @@ if args["--privacy"]:
 elif os.environ.get('PRIVACY'):
     PRIVACY = os.environ.get('PRIVACY')
 else:
-    print("ERROR: --privacy or PRIVACY not found")
+    sys.stderr.write("ERROR: --privacy or PRIVACY not found")
     sys.exit(2)
 
 #if args["--members"]:
@@ -52,7 +52,7 @@ else:
 #elif os.environ.get('MEMBERS'):
 #    MEMBERS = os.environ.get('MEMBERS')
 #else:
-#    print("ERROR: --members or MEMBERS not found")
+#    sys.stderr.write("ERROR: --members or MEMBERS not found")
 #    sys.exit(2)
 
 if args["--id"]:
@@ -60,7 +60,7 @@ if args["--id"]:
 elif os.environ.get('APP_ID'):
     APP_ID = os.environ.get('APP_ID')
 else:
-    print("ERROR: --id or APP_ID not found")
+    sys.stderr.write("ERROR: --id or APP_ID not found")
     sys.exit(2)
 
 if args["--secret"]:
@@ -68,7 +68,7 @@ if args["--secret"]:
 elif os.environ.get('APP_SECRET'):
     APP_SECRET = os.environ.get('APP_SECRET')
 else:
-    print("ERROR: --secret or APP_SECRET not found")
+    sys.stderr.write("ERROR: --secret or APP_SECRET not found")
     sys.exit(2)
 
 if args["--token"]:
@@ -76,7 +76,7 @@ if args["--token"]:
 elif os.environ.get('ACCESS_TOKEN'):
     ACCESS_TOKEN = os.environ.get('ACCESS_TOKEN')
 else:
-    print("ERROR: --token or ACCESS_TOKEN not found")
+    sys.stderr.write("ERROR: --token or ACCESS_TOKEN not found")
     sys.exit(2)
 
 if args["--community"]:
@@ -84,7 +84,7 @@ if args["--community"]:
 elif os.environ.get('COMMUNITY_ID'):
     COMMUNITY_ID = os.environ.get('COMMUNITY_ID')
 else:
-    print("ERROR: --community or COMMUNITY_ID not found")
+    sys.stderr.write("ERROR: --community or COMMUNITY_ID not found")
     sys.exit(2)
 
 GRAPH_URL_PREFIX = "https://graph.facebook.com/"
@@ -94,6 +94,7 @@ headers = {'Authorization': 'Bearer ' + ACCESS_TOKEN}
 graph_url = GRAPH_URL_PREFIX + "/community/groups?name=" + NAME + "&description=スポットグループ&privacy=" + PRIVACY
 result = requests.post(graph_url, headers=headers)
 if result.status_code != requests.codes.ok:
+    sys.stderr.write("ERROR: request failed")
     sys.exit(4)
 result_json = json.loads(result.text)
 group_id = result_json['id']
@@ -102,16 +103,5 @@ print("グループID:{}".format(group_id))
 print("グループ名:{}".format(NAME))
 print("privacy:{}".format(PRIVACY))
 
-    #ユーザ追加パターンとユーザ0パターン
-#    if rnd_user == 0:
-#        print("ユーザ追加")
-#        #メンバーを追加
-#        graph_url = GRAPH_URL_PREFIX + "/" + group_id + "/members/" + DUMMY_USER_ID
-#        result = requests.post(graph_url, headers=headers)
-#        result_json = json.loads(result.text)
-#    else:
-#        print("ユーザ無し")
-#
-#    print("")
 sys.exit(0)
 
