@@ -1,5 +1,5 @@
 # WorkPlaceApps
-コマンドラインからWorkplaceをコントロールするアプリケーション
+コマンドラインから Facebook や Workplace をコントロールするアプリケーション
 
 # work-place-apps環境構築
 
